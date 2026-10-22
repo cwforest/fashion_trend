@@ -1,0 +1,112 @@
+# 패션 속성 온톨로지 — LLM이 키워드/문장을 여기에 매핑한다.
+# 축(axis)은 고정, 값(value)은 확장 가능. aliases는 규칙 기반 폴백(stub 모드)에서도 쓰인다.
+
+axes:
+  item:        "아이템 종류"
+  silhouette:  "실루엣"
+  fit:         "핏"
+  length:      "기장"
+  color:       "색상"
+  material:    "소재"
+  pattern:     "패턴"
+  detail:      "디테일"
+  style:       "무드/스타일"
+  occasion:    "착용 상황"
+  era:         "시대 레퍼런스"
+
+values:
+  item:
+    - {id: item.dress,      ko: 원피스,     aliases: [원피스, 드레스, 미니원피스, 롱원피스, 셔츠원피스]}
+    - {id: item.blouse,     ko: 블라우스,   aliases: [블라우스, 셔츠, 남방]}
+    - {id: item.knit,       ko: 니트,       aliases: [니트, 스웨터, 가디건, 풀오버]}
+    - {id: item.tshirt,     ko: 티셔츠,     aliases: [티셔츠, 반팔티, 긴팔티, 맨투맨]}
+    - {id: item.hoodie,     ko: 후드,       aliases: [후드티, 후드집업, 후디]}
+    - {id: item.jacket,     ko: 자켓,       aliases: [자켓, 재킷, 블레이저, 야상]}
+    - {id: item.coat,       ko: 코트,       aliases: [코트, 트렌치코트, 더플코트, 발마칸]}
+    - {id: item.padding,    ko: 패딩,       aliases: [패딩, 다운, 푸퍼, 경량패딩]}
+    - {id: item.pants,      ko: 팬츠,       aliases: [바지, 팬츠, 슬랙스, 카고팬츠, 조거팬츠]}
+    - {id: item.denim,      ko: 데님,       aliases: [청바지, 데님, 진]}
+    - {id: item.skirt,      ko: 스커트,     aliases: [치마, 스커트, 미니스커트, 롱스커트]}
+    - {id: item.setup,      ko: 셋업,       aliases: [셋업, 투피스, 세트]}
+    - {id: item.athleisure, ko: 애슬레저,   aliases: [레깅스, 요가복, 트레이닝복, 애슬레저]}
+    - {id: item.vest,       ko: 베스트,     aliases: [베스트, 조끼, 질레]}
+
+  silhouette:
+    - {id: sil.oversized,  ko: 오버사이즈, aliases: [오버사이즈, 오버핏, 빅사이즈]}
+    - {id: sil.slim,       ko: 슬림,       aliases: [슬림핏, 스키니, 타이트]}
+    - {id: sil.straight,   ko: 스트레이트, aliases: [스트레이트, 일자]}
+    - {id: sil.aline,      ko: A라인,      aliases: [A라인, 에이라인, 플레어]}
+    - {id: sil.balloon,    ko: 벌룬,       aliases: [벌룬, 버블, 코쿤]}
+    - {id: sil.wide,       ko: 와이드,     aliases: [와이드, 배기, 부츠컷]}
+
+  fit:
+    - {id: fit.relaxed, ko: 릴랙스드, aliases: [루즈핏, 릴랙스, 편안한]}
+    - {id: fit.regular, ko: 레귤러,   aliases: [레귤러핏, 기본핏]}
+    - {id: fit.cropped, ko: 크롭,     aliases: [크롭, 크롭티, 짧은기장]}
+
+  length:
+    - {id: len.mini,  ko: 미니,  aliases: [미니, 숏, 짧은]}
+    - {id: len.midi,  ko: 미디,  aliases: [미디, 무릎기장]}
+    - {id: len.maxi,  ko: 맥시,  aliases: [맥시, 롱, 발목]}
+
+  color:
+    - {id: col.black,   ko: 블랙,   aliases: [블랙, 검정]}
+    - {id: col.white,   ko: 화이트, aliases: [화이트, 흰색, 아이보리]}
+    - {id: col.beige,   ko: 베이지, aliases: [베이지, 크림, 누드]}
+    - {id: col.brown,   ko: 브라운, aliases: [브라운, 갈색, 초콜릿]}
+    - {id: col.navy,    ko: 네이비, aliases: [네이비, 남색]}
+    - {id: col.burgundy,ko: 버건디, aliases: [버건디, 와인, 자주]}
+    - {id: col.pastel,  ko: 파스텔, aliases: [파스텔, 라벤더, 민트, 베이비핑크]}
+    - {id: col.neon,    ko: 네온,   aliases: [네온, 형광]}
+    - {id: col.olive,   ko: 올리브, aliases: [올리브, 카키]}
+
+  material:
+    - {id: mat.denim,    ko: 데님,     aliases: [데님, 청]}
+    - {id: mat.leather,  ko: 레더,     aliases: [레더, 가죽, 무스탕, 에코레더]}
+    - {id: mat.wool,     ko: 울,       aliases: [울, 모직, 캐시미어]}
+    - {id: mat.fleece,   ko: 플리스,   aliases: [플리스, 뽀글이, 양털]}
+    - {id: mat.linen,    ko: 린넨,     aliases: [린넨, 마]}
+    - {id: mat.tweed,    ko: 트위드,   aliases: [트위드]}
+    - {id: mat.satin,    ko: 새틴,     aliases: [새틴, 실크, 공단]}
+    - {id: mat.nylon,    ko: 나일론,   aliases: [나일론, 리플, 바람막이소재]}
+    - {id: mat.corduroy, ko: 코듀로이, aliases: [코듀로이, 골덴]}
+
+  pattern:
+    - {id: pat.solid,    ko: 솔리드,   aliases: [무지, 솔리드]}
+    - {id: pat.stripe,   ko: 스트라이프, aliases: [스트라이프, 줄무늬]}
+    - {id: pat.check,    ko: 체크,     aliases: [체크, 타탄, 깅엄]}
+    - {id: pat.floral,   ko: 플로럴,   aliases: [플라워, 꽃무늬, 플로럴]}
+    - {id: pat.animal,   ko: 애니멀,   aliases: [레오파드, 호피, 지브라]}
+    - {id: pat.logo,     ko: 로고,     aliases: [로고, 레터링, 프린팅]}
+
+  detail:
+    - {id: det.pleats,   ko: 플리츠,   aliases: [플리츠, 주름]}
+    - {id: det.cutout,   ko: 컷아웃,   aliases: [컷아웃, 트임]}
+    - {id: det.ruffle,   ko: 러플,     aliases: [러플, 프릴]}
+    - {id: det.sheer,    ko: 시스루,   aliases: [시스루, 비침]}
+    - {id: det.quilting, ko: 퀼팅,     aliases: [퀼팅, 누빔]}
+    - {id: det.fur,      ko: 퍼,       aliases: [퍼, 털, 페이크퍼]}
+
+  style:
+    - {id: sty.minimal,   ko: 미니멀,     aliases: [미니멀, 심플, 깔끔]}
+    - {id: sty.y2k,       ko: Y2K,        aliases: [Y2K, 와이투케이]}
+    - {id: sty.retro,     ko: 레트로,     aliases: [레트로, 빈티지, 뉴트로]}
+    - {id: sty.street,    ko: 스트릿,     aliases: [스트릿, 힙합]}
+    - {id: sty.quietlux,  ko: 콰이어트럭셔리, aliases: [콰이어트럭셔리, 올드머니, 조용한럭셔리]}
+    - {id: sty.gorpcore,  ko: 고프코어,   aliases: [고프코어, 아웃도어룩, 테크웨어]}
+    - {id: sty.romantic,  ko: 로맨틱,     aliases: [로맨틱, 러블리, 코케트]}
+    - {id: sty.workwear,  ko: 워크웨어,   aliases: [워크웨어, 유틸리티]}
+    - {id: sty.preppy,    ko: 프레피,     aliases: [프레피, 아메카지, 캠퍼스룩]}
+    - {id: sty.athflow,   ko: 애슬레저,   aliases: [애슬레저, 애슬로우, 요가복]}
+
+  occasion:
+    - {id: occ.office,  ko: 오피스,   aliases: [출근룩, 오피스룩, 하객]}
+    - {id: occ.daily,   ko: 데일리,   aliases: [데일리룩, 평상복]}
+    - {id: occ.travel,  ko: 여행,     aliases: [여행룩, 휴가룩, 리조트]}
+    - {id: occ.party,   ko: 파티,     aliases: [파티룩, 연말룩]}
+    - {id: occ.school,  ko: 학교,     aliases: [등교룩, 캠퍼스]}
+
+  era:
+    - {id: era.90s,  ko: 90년대, aliases: [90년대, 나인티즈]}
+    - {id: era.00s,  ko: 2000년대, aliases: [2000년대, 밀레니엄]}
+    - {id: era.70s,  ko: 70년대, aliases: [70년대, 세븐티즈, 보헤미안]}

@@ -1,0 +1,29 @@
+# 네이버쇼핑 분야 코드 (cat_id)
+#
+# 주의: 50000000(패션의류)만 네이버 공식 문서 예시로 확인됨(verified: true).
+#       하위 코드는 공개 문서에 목록이 없다. 네이버쇼핑에서 해당 카테고리를 열고
+#       URL의 cat_id 값을 복사해 채운 뒤  `passion categories verify` 로 실제 API에
+#       질의해 살아있는 코드만 남겨라 (verified 플래그가 자동 갱신된다).
+
+categories:
+  - code: "50000000"
+    name: "패션의류"
+    level: 1
+    verified: true
+
+  # ── 아래는 채워 넣을 자리 (verify 전까지 사용되지 않음) ──
+  - code: "50000167"
+    name: "여성의류"
+    level: 2
+    parent: "50000000"
+    verified: false
+  - code: "50000166"
+    name: "남성의류"
+    level: 2
+    parent: "50000000"
+    verified: false
+  - code: "50000170"
+    name: "유아동의류"
+    level: 2
+    parent: "50000000"
+    verified: false

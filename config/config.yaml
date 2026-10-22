@@ -1,0 +1,92 @@
+# passion — 전역 설정
+project:
+  timezone: Asia/Seoul
+  time_unit: week          # date | week | month  (주간 권장: 노이즈/해상도 균형)
+  history_start: "2019-01-01"   # 쇼핑인사이트는 2017-08-01부터 조회 가능
+
+anchor:
+  # 앵커 체이닝용 고정 기준점. 배치마다 끼워 넣어 배치 간 스케일을 맞춘다.
+  keyword: "원피스"
+  category_code: "50000000"     # 패션의류 (공식 문서로 확인됨)
+  category_name: "패션의류"
+
+sources:
+  naver_shopping_insight: true
+  naver_search_trend: true
+  naver_documents: true          # 블로그/카페/뉴스 — LLM 속성 추출 코퍼스
+  naver_searchad: true           # 검색광고 키워드도구 — 연관어 발굴 + 월간 검색수 절대값
+  llm_websearch: true            # 경로 A — 패션 기사에서 신규 스타일 후보 발굴
+  kosis: false                   # 키 발급 후 true
+  google_trends: false           # trendspy, 불안정 — 교차검증용
+  commerce_ranking: false        # ToS/robots.txt 확인 전까지 OFF
+
+# 키워드 발굴 경로. 두 경로를 같은 지표로 비교하는 것이 이 프로젝트의 중심
+# 연구 질문이므로, keyword_registry.origin 에 반드시 출처를 남긴다. (ARCHITECTURE §2-3)
+discovery:
+  paths: [llm_websearch, searchad_related]
+  max_candidates_per_run: 200
+  seed_keywords_from: config/keywords.yaml
+
+collect:
+  # 타깃 고객이 10~20대 여성이므로 이것이 기본 세그먼트다.
+  # 전체로 조회하면 40~50대 구매력에 묻혀 무관한 신호가 나온다. (ARCHITECTURE §0)
+  primary_segment:
+    gender: "f"
+    ages: ["10", "20"]
+    device: ""                   # 전체 기기
+  # 비교·진단용으로 추가 수집할 세그먼트
+  comparison_segments:
+    - {gender: "", ages: [], device: ""}        # 전체 — 세그먼트 스큐 계산용
+    - {gender: "f", ages: ["30", "40"], device: ""}
+  rate_limit_rps: 5              # 한도는 50 RPS지만 보수적으로
+  monthly_call_budget: 50000     # API HUB 한도. 구 문서의 "일 1,000회"는 무효
+  max_calls_per_run: 2000
+  document_queries_per_keyword: 1
+  documents_per_query: 100
+
+features:
+  lags: [1, 2, 3, 4, 8, 13, 26, 52]
+  rolling_windows: [4, 13, 52]
+  stl_period: 52
+
+# Phase 1 — 트렌드 탐지 점수. 가중치는 임의로 두지 말고 백테스트로 조정한다.
+detect:
+  score_weights:                 # 초기값일 뿐. backtest 가 덮어쓴다
+    growth: 0.4
+    acceleration: 0.35
+    persistence: 0.25
+  persistence_min_weeks: 3       # 연속 양의 성장 — 단발 스파이크 제외
+  min_snr: 1.5                   # 상승폭 / 과거 변동성
+  top_k: 10                      # 주간 리포트 상위 N
+  emit_decline_alerts: true      # 하락 경보를 상승 추천과 동등하게 (ARCHITECTURE §5-5)
+
+backtest:
+  evaluation_horizons: [4, 8]    # 주 — 추천 후 몇 주간의 상승을 볼 것인가
+  folds: 4
+  origins: ["2025-10-01", "2026-01-01", "2026-04-01", "2026-07-01"]
+  metrics: [precision_at_10, recall_at_k, lead_time_median, false_alarm_rate]
+  baselines: [growth_rank, level_rank, random]
+  compare_discovery_paths: true  # 경로 A vs B (ARCHITECTURE §2-3)
+
+# Phase 3 — 판매 데이터 확보 후에만 사용
+model:
+  enabled: false
+  horizons: [2, 4, 6]            # 주 단위. 사입 리드타임에 맞춘 지평
+  backtest_folds: 4
+  min_history_weeks: 78          # 1.5년 — 52주 계절성을 보려면 최소치
+  quantiles: [0.1, 0.5, 0.9]
+  lightgbm:
+    n_estimators: 600
+    learning_rate: 0.03
+    num_leaves: 31
+    min_child_samples: 20
+    subsample: 0.8
+    colsample_bytree: 0.8
+
+lifecycle:
+  emerging:
+    max_level_pct: 0.40          # 전체 대비 하위 40% 레벨인데
+    min_slope_13w: 0.15          # 13주 기울기(로그)가 +15% 이상
+    min_yoy: 0.30
+  declining:
+    max_slope_13w: -0.12
